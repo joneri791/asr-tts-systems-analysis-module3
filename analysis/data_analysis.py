@@ -321,6 +321,32 @@ class DataAnalyzer:
         
         logging.info("Анализ данных завершен")
         return analysis_results
+        
+    def get_feature_methods_analysis(self):
+    """
+    Анализ использования методов извлечения признаков
+    """
+    query = text("""
+        SELECT 
+            fm.название,
+            COUNT(s.id) as usage_count,
+            AVG(s.количество_скачиваний) as avg_downloads
+        FROM feature_extraction_methods fm
+        JOIN system_feature_methods sfm ON fm.id = sfm.feature_method_id
+        JOIN systems s ON sfm.system_id = s.id
+        GROUP BY fm.id, fm.название
+        ORDER BY usage_count DESC
+    """)
+
+    result = self.session.execute(query).fetchall()
+    return [
+        {
+            'name': row[0],
+            'usage_count': row[1],
+            'avg_downloads': row[2],
+        }
+        for row in result
+    ]
 
 def main():
     """
