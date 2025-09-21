@@ -24,6 +24,13 @@ system_functional_purposes = Table(
     Column('system_id', Integer, ForeignKey('systems.id', ondelete='CASCADE')),
     Column('functional_purpose_id', Integer, ForeignKey('functional_purposes.id', ondelete='CASCADE'))
 )
+system_feature_methods = Table(
+    'system_feature_methods',
+    Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('system_id', Integer, ForeignKey('systems.id', ondelete='CASCADE')),
+    Column('feature_extraction_method_id', Integer, ForeignKey('feature_extraction_methods.id', ondelete='CASCADE'))
+)
 
 
 class VocabularyType(Base):
@@ -72,6 +79,7 @@ class System(Base):
     metrics = relationship("SystemMetric", back_populates="system", cascade="all, delete-orphan")
     papers = relationship("SystemPaper", back_populates="system", cascade="all, delete-orphan")
     benchmark_results = relationship("BenchmarkResult", back_populates="system", cascade="all, delete-orphan")
+    feature_methods = relationship("FeatureExtractionMethod", secondary=system_feature_methods, back_populates="systems")
 
 
 class SystemMetric(Base):
@@ -197,3 +205,16 @@ class BenchmarkResult(Base):
     # Связи
     benchmark = relationship("Benchmark", back_populates="results")
     system = relationship("System", back_populates="benchmark_results")
+
+    class FeatureExtractionMethod(Base):
+    __tablename__ = 'feature_extraction_methods'
+    
+    id = Column(Integer, primary_key=True)
+    название = Column(String(100), unique=True, nullable=False)
+    принцип_работы = Column(Text)
+    преимущества = Column(Text)
+    недостатки = Column(Text)
+    вычислительная_сложность = Column(String(50))
+
+    # Связи
+    systems = relationship("System", secondary=system_feature_methods, back_populates="feature_methods")
