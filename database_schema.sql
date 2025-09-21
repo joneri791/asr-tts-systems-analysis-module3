@@ -178,3 +178,19 @@ CREATE TABLE SYSTEM_SPEECH (
 	FOREIGN KEY (speech_id) REFERENCES SYSTEM_SPEAKERS(speech_id) ON DELETE CASCADE,
 	FOREIGN KEY (system_id) REFERENCES systems(system_id) ON DELETE CASCADE,
 	);
+CREATE TABLE feature_extraction_methods (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    название VARCHAR(100) NOT NULL UNIQUE,
+    принцип_работы TEXT,
+    преимущества TEXT,
+    недостатки TEXT,
+    вычислительная_сложность VARCHAR(50)
+);
+
+CREATE TABLE system_feature_methods (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    system_id INT,
+    feature_method_id INT,
+    FOREIGN KEY (system_id) REFERENCES systems(id) ON DELETE CASCADE,
+    FOREIGN KEY (feature_method_id) REFERENCES feature_extraction_methods(id) ON DELETE CASCADE
+);
