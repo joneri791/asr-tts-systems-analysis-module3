@@ -1,0 +1,3 @@
+Whisper | An end-to-end ASR model trained on multilingual speech. Supports speaker-independent continuous speech.
+Vosk | Open-source speech recognition toolkit with speaker adaptation and isolated words support.
+DeepSpeech | Mozilla’s end-to-end speech recognition engine for continuous speech.
